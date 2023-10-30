@@ -1,3 +1,20 @@
+const crypto = require('crypto');
+
+function generateHash(data) {
+  return crypto.createHash('sha256').update(data).digest('hex');
+}
+
+function generateHashes(num) {
+  let hashes = [];
+  for (let i = 0; i < num; i++) {
+    // Using the current index as the data to hash
+    hashes.push(BigInt(`0x${generateHash(i.toString())}`));
+  }
+  return hashes;
+}
+
+const hashes = generateHashes(100);
+
 const recursive = function (hash, n) {
   if (n === 0) {
     return 1n;
@@ -101,8 +118,8 @@ function simplifyFraction(fraction) {
   };
 }
 
-const x = [1, 2, 3, 4, 5];
-const y = [5, 10, 31, 2, 6];
+const x = Array.from({ length: hashes.length }, (_, i) => i + 1);
+const y = hashes;
 
 // Running the sum
 // const result = recursive(mockHash, 2000);
