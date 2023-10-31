@@ -14,10 +14,11 @@ function generateHashes(num) {
 }
 
 const hashes = generateHashes(100);
+// const hashes = [1n, 2n, 3n];
 
 const recursive = function (hash, n) {
   if (n === 0) {
-    return 1n;
+    return 1;
   }
   return hash ** BigInt(n) + recursive(hash, n - 1);
 };
@@ -28,11 +29,11 @@ const mockHash = BigInt(
 
 function addPolynomials(p1, p2) {
   const length = Math.max(p1.length, p2.length);
-  const result = new Array(length).fill({ num: 0, denom: 1 });
+  const result = new Array(length).fill({ num: 0n, denom: 1n });
 
   for (let i = 0; i < length; i++) {
-    const term1 = p1[i] || { num: 0, denom: 1 };
-    const term2 = p2[i] || { num: 0, denom: 1 };
+    const term1 = p1[i] || { num: 0n, denom: 1n };
+    const term2 = p2[i] || { num: 0n, denom: 1n };
     result[i] = addFractions(term1, term2);
   }
 
@@ -41,12 +42,12 @@ function addPolynomials(p1, p2) {
 
 function getLagrangeCoefficients(x, y) {
   const n = x.length;
-  let coefficients = new Array(n).fill({ num: 0, denom: 1 });
+  let coefficients = new Array(n).fill({ num: 0n, denom: 1n });
 
   for (let i = 0; i < n; i++) {
-    let basisCoeff = [{ num: 1, denom: 1 }];
+    let basisCoeff = [{ num: 1n, denom: 1n }];
 
-    let denom = 1;
+    let denom = 1n;
     for (let j = 0; j < n; j++) {
       if (i !== j) {
         denom *= x[i] - x[j];
@@ -56,8 +57,8 @@ function getLagrangeCoefficients(x, y) {
     for (let j = 0; j < n; j++) {
       if (i !== j) {
         basisCoeff = multiplyPolynomials(basisCoeff, [
-          { num: -x[j], denom: 1 },
-          { num: 1, denom: 1 },
+          { num: -x[j], denom: 1n },
+          { num: 1n, denom: 1n },
         ]);
       }
     }
@@ -77,8 +78,8 @@ function getLagrangeCoefficients(x, y) {
 
 function multiplyPolynomials(p1, p2) {
   const result = new Array(p1.length + p2.length - 1).fill({
-    num: 0,
-    denom: 1,
+    num: 0n,
+    denom: 1n,
   });
   for (let i = 0; i < p1.length; i++) {
     for (let j = 0; j < p2.length; j++) {
@@ -106,7 +107,7 @@ function addFractions(f1, f2) {
 }
 
 function gcd(a, b) {
-  if (b === 0) return a;
+  if (b === 0 || b === 0n) return a;
   return gcd(b, a % b);
 }
 
@@ -118,10 +119,11 @@ function simplifyFraction(fraction) {
   };
 }
 
-const x = Array.from({ length: hashes.length }, (_, i) => i + 1);
+const x = Array.from({ length: hashes.length }, (_, i) => BigInt(i) + 1n);
 const y = hashes;
 
 // Running the sum
 // const result = recursive(mockHash, 2000);
-
-console.log(getLagrangeCoefficients(x, y));
+// console.log(hashes);
+const poly = getLagrangeCoefficients(x, y);
+console.log(poly);
